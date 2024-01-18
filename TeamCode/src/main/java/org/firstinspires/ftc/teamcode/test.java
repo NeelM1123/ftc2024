@@ -27,6 +27,8 @@ package org.firstinspires.ftc.teamcode;/* Copyright (c) 2021 FIRST. All rights r
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import static java.lang.Math.abs;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -55,12 +57,14 @@ public class test extends LinearOpMode {
     double power1=1.0;
     double power2=1.0;
     double damp=0.7;
-    double ratio=0.9;
-
+    double ratio=0.5;
+    double xratio=0.0;
     double finalPower4 = power1;
     double finalPower5 = power2;
 
     boolean isConfigMode=false;
+    int pos_m1,pos_m2;
+    //double pos_m2=0;
 
     @Override
     public void runOpMode() {
@@ -93,18 +97,20 @@ public class test extends LinearOpMode {
         power1=power1*damp;
         power2=power2*damp;
 
-
+        int mpos_1,mpos_2,mpos_3,mpos_4;
 
         servo.setPosition(0);
+
         while (opModeIsActive()) {
             if (gamepad1.back){
                 isConfigMode=!isConfigMode;
                 //telemetry.addLine("ConfigMode: " + isConfigMode);
-                telemetry.addData("Status", "ConfigMode: " + isConfigMode);
-                telemetry.update();
+                //telemetry.update();
+                sleep(300);
             }
             if (isConfigMode){
                 adjustConfig();
+                sleep(100);
             }else{
                 controlRobot();
             }
@@ -112,11 +118,30 @@ public class test extends LinearOpMode {
 
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            mpos_1=motor1.getCurrentPosition();
+            mpos_2= motor2.getCurrentPosition();
+            mpos_3=leftDrive.getCurrentPosition();
+            mpos_4=rightDrive.getCurrentPosition();
+
+            telemetry.addData("ConfigMode",  isConfigMode);
+            telemetry.addData("Config","Damp: " + damp + " Ratio: " + ratio);
+            telemetry.addData("MPos 1",mpos_1);
+            telemetry.addData("MPos 2",mpos_2);
+            telemetry.addData("MPos 3",mpos_3);
+            telemetry.addData("MPos 4",mpos_4);
+            telemetry.addData("xratio",xratio);
+
+
+
+
+            telemetry.addData("Runtime",  runtime.toString());
             telemetry.update();
+            sleep(10);
+
         }}
     public void adjustConfig(){
         boolean updated=false;
+
         if (gamepad1.dpad_up){
             damp+=0.1;
             if (damp>1)
@@ -138,14 +163,166 @@ public class test extends LinearOpMode {
                 ratio=2;
             updated=true;
         }
-        if (updated){
-            telemetry.addData("Status","Config:" + "Damp: " + damp + " Ratio: " + ratio);
-            telemetry.update();
-        }
+       // if (updated){
+            //telemetry.update();
+       // }
+
+    }
+    public void initArm(){
+        motor1.setTargetPosition(pos_m1);
+        motor2.setTargetPosition(pos_m2);
+        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor1.setPower(power1);
+        motor2.setPower(power1);
 
     }
     public void controlRobot(){
+        boolean moveArm = false;
+        moveArm= gamepad1.right_bumper || gamepad1.left_bumper || gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y;
 
+        moveRobot();
+        moveArm();
+        /*
+        if (!moveArm){
+            motor1.setPower(0);
+            motor2.setPower(0);
+            motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+
+         */
+    }
+    public void moveArm() {
+        if (!(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.x || gamepad1.y || gamepad1.a || gamepad1.b))
+            return;
+        if (gamepad1.left_bumper || gamepad1.right_bumper)
+            moveArmX();
+        else
+            moveArmY();
+    }
+    public void moveArmX() {
+        double txratio=2.0;
+        double step=5;
+        pos_m1=(int)(motor1.getCurrentPosition()+txratio*step);
+        pos_m2=(int)(motor2.getCurrentPosition()+step)
+        /*
+        double power1 = damp;
+        double power2 = -power1 * ratio;
+        int mpos1, mpos2, mpos1_new, mpos2_new, delta_mpos1, delta_mpos2;
+        mpos1 = motor1.getCurrentPosition();
+        mpos2 = motor2.getCurrentPosition();
+        int tdelta = 40;
+        double txratio=2.0;
+        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor1.setPower(power1);
+        motor2.setPower(power1);
+        if (gamepad1.left_bumper){
+            motor1.setTargetPosition((int) (mpos1+(txratio*tdelta)));
+            motor2.setTargetPosition(mpos2-tdelta);
+        }else if (gamepad1.right_bumper){
+            motor1.setTargetPosition((int)(mpos1-txratio*tdelta));
+            motor2.setTargetPosition(mpos2+tdelta);
+        }
+        */
+         */
+        /*
+
+        for (int i=0;i<100;i++){
+            if (!(motor1.isBusy() || motor2.isBusy()) )
+                break;
+            sleep(10);
+        }
+
+         */
+        //sleep(50);
+    }
+    public void moveArmY() {
+        int step=5;
+
+        //motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (gamepad1.x)
+            pos_m1=motor1.getCurrentPosition()+step;
+            //motor1.setPower(power1);
+        if (gamepad1.b)
+            pos_m1=motor1.getCurrentPosition()-step;
+
+        //motor1.setPower(-power1);
+        if (gamepad1.a)
+            pos_m1=motor2.getCurrentPosition()-step;
+
+        //motor2.setPower(-power1);
+        if (gamepad1.y)
+            pos_m1=motor1.getCurrentPosition()+step;
+
+        // motor2.setPower(power1);
+
+    }
+
+    public void moveArm2() {
+        if (!(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.x || gamepad1.y || gamepad1.a || gamepad1.b))
+            return;
+
+        double power1 = damp;
+        double power2 = -power1 * ratio;
+        double mpos1, mpos2, mpos1_new, mpos2_new, delta_mpos1, delta_mpos2;
+        mpos1 = motor1.getCurrentPosition();
+        mpos2 = motor2.getCurrentPosition();
+        if (gamepad1.left_bumper || gamepad1.right_bumper){
+            if (gamepad1.left_bumper) {
+                motor1.setPower(power1);
+                motor2.setPower(power2);
+            } else if (gamepad1.right_bumper) {
+                motor1.setPower(-power1);
+                motor2.setPower(-power2);
+            }
+            sleep(10);
+            delta_mpos2=motor2.getCurrentPosition()-mpos2;
+            delta_mpos1=motor1.getCurrentPosition()-mpos1;
+            xratio=abs(delta_mpos1/delta_mpos2+0.5);
+                if (xratio > 2.05) {
+                    ratio += 0.1;
+                } else if (xratio < 1.95)
+                    ratio -= 0.1;
+            for(int i =0 ;i<10;i++) {
+                delta_mpos2=motor2.getCurrentPosition()-mpos2;
+                //delta_mpos1=motor1.getCurrentPosition()-mpos1;
+                if (xratio<2.05 && xratio>1.95){
+                    break;
+                }else if(xratio>2.05){
+                    int j=10;
+                    //motor2.setTargetPosition();
+                }
+                xratio=abs(delta_mpos1/delta_mpos2+0.005);
+            }
+
+
+
+
+        } else {
+            if (gamepad1.x)
+                motor1.setPower(power1);
+            if (gamepad1.b)
+                motor1.setPower(-power1);
+            if (gamepad1.a)
+                motor2.setPower(-power1);
+            if (gamepad1.y)
+                motor2.setPower(power1);
+
+
+     //       sleep(10);
+        }
+
+    }
+    public void moveRobot(){
+        double drive = -gamepad1.left_stick_y;
+        double turn = gamepad1.right_stick_x;
+        leftPower = Range.clip(drive + turn, -1.0, 1.0) ;
+        rightPower = Range.clip(drive - turn, -1.0, 1.0) ;
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
     }
 
     public void xd(){
