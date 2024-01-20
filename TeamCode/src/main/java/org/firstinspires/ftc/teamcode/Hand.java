@@ -1,2 +1,4 @@
-package org.firstinspires.ftc.teamcode;public class Hand {
+package org.firstinspires.ftc.teamcode;
+
+public class Hand {
 }
