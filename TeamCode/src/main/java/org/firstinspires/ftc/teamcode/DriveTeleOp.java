@@ -14,6 +14,19 @@ public class DriveTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             robot.gamepadControl(gamepad1,gamepad2);
+            telemetry.addData("Pos lowerArm: ",robot.arm.motor_lower_arm.getCurrentPosition());
+            telemetry.addData("Pos upperArm: ",robot.arm.motor_upper_arm.getCurrentPosition());
+            telemetry.addData("Pos leftDrive: ",robot.chassis.leftDrive.getCurrentPosition());
+            telemetry.addData("Pos rightDrive: ",robot.chassis.rightDrive.getCurrentPosition());
+            telemetry.addData("Pos hand: ",robot.hand.servo_hand.getPosition());
+            telemetry.addData("Pos wrist: ",robot.hand.servo_wrist.getPosition());
+            telemetry.addData("la mode:", robot.arm.motor_lower_arm.getMode().toString());
+            telemetry.update();
+
+
+
+
+
             sleep(10);
         }
     }

@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.util.Range;
 
 public class Robot {
     protected Chassis chassis;
-    private Flight flight;
-    private Hand hand;
-    private Arm arm;
+    protected Flight flight;
+    protected Hand hand;
+    protected Arm arm;
 
     public Robot(HardwareMap hardwareMap){
         chassis = new Chassis(hardwareMap.get(DcMotor.class, "left_drive"), hardwareMap.get(DcMotor.class, "right_drive"),10);
@@ -36,7 +36,7 @@ public class Robot {
             }
             chassis.move(controllerA.left_stick_y,-controllerA.right_stick_x);
             arm.moveLowerArm(controllerB.left_stick_y);
-            arm.moveUpperArm(controllerB.right_stick_y);
+            arm.moveUpperArm(-controllerB.right_stick_y);
             if (controllerA.b){
                 hand.moveFingers(Hand.FingersPosition.flex);
             }

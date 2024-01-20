@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 public class Chassis {
-    private final DcMotor leftDrive;
-    private final DcMotor rightDrive;
+    protected final DcMotor leftDrive;
+    protected final DcMotor rightDrive;
     int ticks_per_inch;
 
     public Chassis(DcMotor left_drive, DcMotor right_drive, int _ticks_per_inch) {

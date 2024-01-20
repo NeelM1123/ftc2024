@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Hand {
-    private final Servo servo_hand;
-    private final Servo servo_wrist;
+    protected final Servo servo_hand;
+    protected final Servo servo_wrist;
 
     public Hand(Servo hand_servo, Servo wrist_servo) {
         servo_hand = hand_servo;
