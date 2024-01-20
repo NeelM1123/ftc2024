@@ -205,7 +205,7 @@ public class test extends LinearOpMode {
         double txratio=2.0;
         double step=5;
         pos_m1=(int)(motor1.getCurrentPosition()+txratio*step);
-        pos_m2=(int)(motor2.getCurrentPosition()+step)
+        pos_m2=(int)(motor2.getCurrentPosition()+step);
         /*
         double power1 = damp;
         double power2 = -power1 * ratio;
@@ -226,7 +226,7 @@ public class test extends LinearOpMode {
             motor2.setTargetPosition(mpos2+tdelta);
         }
         */
-         */
+
         /*
 
         for (int i=0;i<100;i++){

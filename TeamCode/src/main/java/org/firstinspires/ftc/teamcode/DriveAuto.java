@@ -2,18 +2,16 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Linear OpMode DriveTeleOp", group = "Linear OpMode")
-public class DriveTeleOp extends LinearOpMode {
+@TeleOp(name = "Linear OpMode DriveAutonomous", group = "Linear OpMode")
+public class DriveAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.gamepadControl(gamepad1,gamepad2);
+            robot.chassis.move(36,0.3,0);
             sleep(10);
         }
     }
