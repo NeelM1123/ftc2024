@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class DriveTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = new Robot(hardwareMap,this);
         waitForStart();
 
         while (opModeIsActive()) {

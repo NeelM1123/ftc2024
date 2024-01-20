@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Math.abs;
 import static java.lang.Thread.sleep;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
@@ -15,12 +17,13 @@ public class Arm {
     }
    // boolean isArmBusy()
     protected DcMotor motor_lower_arm, motor_upper_arm;
+    protected LinearOpMode lopmode;
     double len_lower_arm, len_upper_arm,  gear_ratio_lower_arm, gear_ratio_upper_arm, offset_ground, gear_ratio_lower_to_upper;
     double maxLowerArmPower=0.5;
     double maxUpperArmPower=0.4;
     int initial_to_basic_position_ticks_lowerArm=414;
     int initial_to_basic_position_ticks_upperArm=-732;
-    public Arm(DcMotor lower_arm_motor, DcMotor upper_arm_motor, double lower_arm_length,double upper_arm_length, double lower_arm_gear_ratio,double upper_arm_gear_ratio,double ground_offset){
+    public Arm(DcMotor lower_arm_motor, DcMotor upper_arm_motor, double lower_arm_length, double upper_arm_length, double lower_arm_gear_ratio, double upper_arm_gear_ratio, double ground_offset, LinearOpMode lo){
         motor_lower_arm=lower_arm_motor;
         motor_upper_arm=upper_arm_motor;
         len_lower_arm=lower_arm_length;
@@ -29,6 +32,7 @@ public class Arm {
         gear_ratio_upper_arm=upper_arm_gear_ratio;
         offset_ground=ground_offset;
         gear_ratio_lower_to_upper=gear_ratio_lower_arm/gear_ratio_lower_to_upper;
+        this.lopmode=lo;
         init();
     }
 
@@ -48,18 +52,31 @@ public class Arm {
     private void setArmPosition(int lower_arm_position,int upper_arm_position,boolean resetEncoders)  {
         DcMotor.RunMode la_mode=motor_lower_arm.getMode();
         DcMotor.RunMode ua_mode=motor_upper_arm.getMode();
+        int step=15;
+        int xpos_la,xstep_la;
         motor_lower_arm.setPower(0);
         motor_upper_arm.setPower(0);
-        motor_lower_arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_upper_arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor_upper_arm.setTargetPosition(upper_arm_position);
+        motor_lower_arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motor_lower_arm.setTargetPosition(lower_arm_position);
         motor_upper_arm.setPower(maxUpperArmPower/2);
-
-        try{
-            sleep(550);}catch(InterruptedException ie){}
         motor_lower_arm.setPower(maxLowerArmPower/2);
+        for(int i=0;i<100;i++){
+            if (abs(motor_upper_arm.getCurrentPosition() - upper_arm_position) > step)
+                if (upper_arm_position < motor_upper_arm.getCurrentPosition())
+                    motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() - step);
+                else
+                    motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() + step);
+
+            if (abs(motor_lower_arm.getCurrentPosition() - lower_arm_position) > step)
+                if (lower_arm_position < motor_lower_arm.getCurrentPosition())
+                    motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() - step);
+                else
+                    motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() + step);
+            lopmode.sleep(20);
+        }
+        //motor_lower_arm.setTargetPosition(lower_arm_position);
+       //
 
         /*
             sleep(150);
