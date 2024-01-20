@@ -61,20 +61,23 @@ public class Arm {
 
         motor_upper_arm.setPower(maxUpperArmPower/2);
         motor_lower_arm.setPower(maxLowerArmPower/2);
+
         for(int i=0;i<100;i++){
             if (abs(motor_upper_arm.getCurrentPosition() - upper_arm_position) > step)
                 if (upper_arm_position < motor_upper_arm.getCurrentPosition())
                     motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() - step);
                 else
                     motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() + step);
-
+            lopmode.sleep(250);
+/*
             if (abs(motor_lower_arm.getCurrentPosition() - lower_arm_position) > step)
                 if (lower_arm_position < motor_lower_arm.getCurrentPosition())
-                    motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() - step);
+                    motor_lower_arm.setTargetPosition(motor_lower_arm.getCurrentPosition() - step);
                 else
-                    motor_upper_arm.setTargetPosition(motor_upper_arm.getCurrentPosition() + step);
-            lopmode.sleep(20);
+                    motor_lower_arm.setTargetPosition(motor_lower_arm.getCurrentPosition() + step);
+   */
         }
+
         //motor_lower_arm.setTargetPosition(lower_arm_position);
        //
 
