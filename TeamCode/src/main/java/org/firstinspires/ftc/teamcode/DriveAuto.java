@@ -1,17 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Linear OpMode DriveAutonomous", group = "Linear OpMode")
+@Autonomous(name = "Linear OpMode DriveAutonomous", group = "Linear OpMode")
 public class DriveAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap,this);
         waitForStart();
+        boolean moved=false;
 
         while (opModeIsActive()) {
-            robot.chassis.move(36,0.3,0);
+            if (!(moved)) {
+                robot.chassis.move(36, 0.3, 0);
+                robot.arm.moveToPosition(Arm.ARM_POSITION.BASIC_UP,false);
+                moved=true;
+            }
             sleep(10);
         }
     }

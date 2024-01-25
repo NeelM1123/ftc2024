@@ -20,7 +20,7 @@ public class Robot {
                 7.0,
                 13.0,
                 0.25, 0.5, 1.5,lo);
-        hand = new Hand(hardwareMap.get(Servo.class, "servo"), hardwareMap.get(Servo.class, "servo1"));
+        hand = new Hand(hardwareMap.get(Servo.class, "servo1"), hardwareMap.get(Servo.class, "servo"));
         flight = new Flight(hardwareMap.get(Servo.class, "servo2"));
     }
     public Robot(Chassis _chassis, Arm _arm, Hand _hand, Flight _flight){
@@ -34,11 +34,29 @@ public class Robot {
             if (controllerA.back){
                 if (controllerA.right_bumper)
                     flight.launch();
+
+                return;
             }
-            chassis.move(controllerA.left_stick_y,-controllerA.right_stick_x);
+            if (controllerB.left_bumper){
+                if (controllerB.y)
+                    arm.moveToPosition(Arm.ARM_POSITION.READY_TO_PICK,false);
+                else if (controllerB.b)
+                    arm.moveToPosition(Arm.ARM_POSITION.LEVEL1,false);
+                else if (controllerB.a)
+                    arm.moveToPosition(Arm.ARM_POSITION.LEVEL2,false);
+                else if (controllerB.x)
+                    arm.moveToPosition(Arm.ARM_POSITION.BASIC_UP,false);
+
+                return;
+            }
+            if(controllerA.left_bumper)
+                chassis.move(controllerA.left_stick_y,-controllerA.right_stick_x, true);
+            else
+                chassis.move(controllerA.left_stick_y,-controllerA.right_stick_x, false);
+
             arm.moveLowerArm(controllerB.left_stick_y);
-            arm.moveUpperArm(-controllerB.right_stick_y);
-            if (controllerA.b ||controllerB.b){
+            arm.moveUpperArm(controllerB.right_stick_y);
+            if (controllerA.x ||controllerB.x){
                 hand.moveFingers(Hand.FingersPosition.flex);
             }
             if (controllerA.y || controllerB.y){
