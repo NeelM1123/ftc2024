@@ -1,15 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 public class Chassis {
-    protected final DcMotor leftDrive;
-    protected final DcMotor rightDrive;
+    protected final DcMotorEx leftDrive,rightDrive;
+    //protected final DcMotor ;
     int ticks_per_inch;
 
-    public Chassis(DcMotor left_drive, DcMotor right_drive, int _ticks_per_inch) {
+    public Chassis(DcMotorEx left_drive, DcMotorEx right_drive, int _ticks_per_inch) {
+        left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         left_drive.setDirection(DcMotorSimple.Direction.REVERSE);
         right_drive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftDrive = left_drive;

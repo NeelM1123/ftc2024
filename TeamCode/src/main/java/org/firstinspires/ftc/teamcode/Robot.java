@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -14,9 +15,9 @@ public class Robot {
     protected Arm arm;
 
     public Robot(HardwareMap hardwareMap, LinearOpMode lo){
-        chassis = new Chassis(hardwareMap.get(DcMotor.class, "left_drive"), hardwareMap.get(DcMotor.class, "right_drive"),10);
-        arm = new Arm(hardwareMap.get(DcMotor.class, "motor1"),
-                hardwareMap.get(DcMotor.class, "motor2"),
+        chassis = new Chassis(hardwareMap.get(DcMotorEx.class, "left_drive"), hardwareMap.get(DcMotorEx.class, "right_drive"),10);
+        arm = new Arm(hardwareMap.get(DcMotorEx.class, "motor1"),
+                hardwareMap.get(DcMotorEx.class, "motor2"),
                 7.0,
                 13.0,
                 0.25, 0.5, 1.5,lo);
@@ -54,9 +55,10 @@ public class Robot {
             else
                 chassis.move(controllerA.left_stick_y,-controllerA.right_stick_x, false);
 
-            arm.moveLowerArm(controllerB.left_stick_y);
-            arm.moveUpperArm(controllerB.right_stick_y);
+            //arm.moveLowerArm(controllerB.left_stick_y);
+            //arm.moveUpperArm(controllerB.right_stick_y);
             if (controllerA.x ||controllerB.x){
+                //arm.moveX();
                 hand.moveFingers(Hand.FingersPosition.flex);
             }
             if (controllerA.y || controllerB.y){

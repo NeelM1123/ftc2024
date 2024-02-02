@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import java.util.ArrayList;
 
 @TeleOp(name = "Linear OpMode DriveTeleOp", group = "Linear OpMode")
 public class DriveTeleOp extends LinearOpMode {
@@ -11,9 +14,11 @@ public class DriveTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap,this);
         waitForStart();
-
+        robot.arm.init();
+        //robot.arm.moveX();
         while (opModeIsActive()) {
             robot.gamepadControl(gamepad1,gamepad2);
+            /*
             telemetry.addData("Pos lowerArm: ",robot.arm.motor_lower_arm.getCurrentPosition());
             telemetry.addData("Pos upperArm: ",robot.arm.motor_upper_arm.getCurrentPosition());
             telemetry.addData("Pos leftDrive: ",robot.chassis.leftDrive.getCurrentPosition());
@@ -21,11 +26,24 @@ public class DriveTeleOp extends LinearOpMode {
             telemetry.addData("Pos hand: ",robot.hand.servo_hand.getPosition());
             telemetry.addData("Pos wrist: ",robot.hand.servo_wrist.getPosition());
             telemetry.addData("la mode:", robot.arm.motor_lower_arm.getMode().toString());
+            telemetry.addData("lowerArmBusy",robot.arm.motor_lower_arm.isBusy());
+
+             */
+            DcMotorEx[] motors ={robot.arm.motor_lower_arm,robot.arm.motor_upper_arm};
+            for (DcMotorEx x:motors) {
+                telemetry.addData(x.getDeviceName() + " pos",x.getCurrentPosition());
+                telemetry.addData(x.getDeviceName() + " mode",x.getMode().toString());
+                telemetry.addData(x.getDeviceName() + " velocity",x.getVelocity());
+                telemetry.addData(x.getDeviceName() + " power",x.getPower());
+                telemetry.addData(x.getDeviceName() + " isbusy",x.isBusy());
+
+            }
+
+
+
+
+
             telemetry.update();
-
-
-
-
 
             sleep(10);
         }
