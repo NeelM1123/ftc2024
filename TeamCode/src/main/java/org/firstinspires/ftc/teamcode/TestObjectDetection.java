@@ -25,6 +25,7 @@ import java.util.List;
 public class TestObjectDetection extends LinearOpMode {
 
     DcMotor leftDrive;
+
     DcMotor rightDrive;
     List<Recognition> currentRecognitions;
 
@@ -61,6 +62,7 @@ public class TestObjectDetection extends LinearOpMode {
             while (opModeIsActive()) {
 
                 telemetryTfod();
+                /*
                 if (!currentRecognitions.isEmpty()) {
                     // Assume the first recognition is the target object
                     Recognition targetRecognition = currentRecognitions.get(0);
@@ -70,6 +72,7 @@ public class TestObjectDetection extends LinearOpMode {
                     leftDrive.setPower(0);
                     rightDrive.setPower(0);
                 }
+                 */
                 // Push telemetry to the Driver Station.
                 telemetry.update();
 
@@ -114,8 +117,7 @@ public class TestObjectDetection extends LinearOpMode {
      */
     private void telemetryTfod() {
 
-       // List<Recognition>
-        currentRecognitions = tfod.getRecognitions();
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
         // Step through the list of recognitions and display info for each one.
