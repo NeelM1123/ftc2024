@@ -154,12 +154,12 @@ public class Arm {
                 else
                     motor_lower_arm.setTargetPosition(motor_lower_arm.getCurrentPosition() + step);
         }
-   */
 
-        //motor_lower_arm.setTargetPosition(lower_arm_position);
-       //
 
-        /*
+        motor_lower_arm.setTargetPosition(lower_arm_position);
+
+
+
             sleep(150);
 
 
